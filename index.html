@@ -4,7 +4,2494 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Construction Project Tracker</title>
+    <!-- Google Fonts: Plus Jakarta Sans for a modern, sleek engineering aesthetic --><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Project Tracker</title>
     <!-- Google Fonts: Plus Jakarta Sans for a modern, sleek engineering aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Sophisticated Slate & Industrial Amber/Teal Palette */
+            --bg-main: #f4f6f9;
+            --surface: #ffffff;
+            --surface-hover: #f8fafc;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+
+            --primary: #0284c7;        /* Vibrant Engineering Sky Blue */
+            --primary-hover: #0369a1;
+            --primary-light: #e0f2fe;
+
+            --success: #0d9488;        /* Modern Teal for completed/safe */
+            --success-light: #f0fdfa;
+
+            --warning: #d97706;        /* Rich Amber for in-progress/alerts */
+            --warning-light: #fffbeb;
+
+            --danger: #e11d48;         /* Rose Red for accidents/delays */
+            --danger-light: #fff1f2;
+
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.25;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout Container - Optimized for Single Viewport Screen Fit */
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 8px 12px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header / Navbar - Compact */
+        header {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 6px 12px;
+            margin-bottom: 6px;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-title h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .header-title p {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* Navigation Tabs for Views */
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        .nav-tab {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Buttons & Inputs - Compact */
+        .btn {
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.725rem;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            cursor: pointer;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #0f766e; }
+
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-warning:hover { background: #b45309; }
+
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #be123c; }
+
+        .btn-light { background: var(--surface); border-color: var(--border); color: var(--text-main); }
+        .btn-light:hover { background: var(--surface-hover); border-color: var(--text-muted); }
+        .btn:active { transform: translateY(1px); }
+        .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .btn-small { padding: 2px 5px; font-size: 0.625rem; }
+
+        input, select, textarea {
+            font-family: inherit;
+            font-size: 0.75rem;
+            padding: 4px 6px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-main);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        /* Dashboard Overview Grid - Clickable & Compact */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .stat-card.success::after { background: var(--success); }
+        .stat-card.warning::after { background: var(--warning); }
+        .stat-card.danger::after { background: var(--danger); }
+
+        .stat-label {
+            font-size: 0.58rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+        }
+
+        /* Main Layout Grid - Split Screen Fitting Without Scrolling */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 6px;
+            flex-grow: 1;
+            overflow: hidden;
+            min-height: 0;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout { grid-template-columns: 1fr; overflow-y: auto; }
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            min-height: 0;
+            padding-right: 2px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 8px 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Perfectly Fitting Compact Calendar Styling */
+        .calendar-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: auto repeat(6, 1fr);
+            gap: 2px;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            padding: 2px 0;
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 3px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--primary);
+            background: var(--surface-hover);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .calendar-day.today {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+            background: #f8fafc;
+        }
+
+        .day-number {
+            font-weight: 700;
+            font-size: 0.65rem;
+            color: var(--text-main);
+            margin-bottom: 1px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .day-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .day-badge {
+            font-size: 0.52rem;
+            padding: 1px 2px;
+            border-radius: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            line-height: 1;
+        }
+
+        /* Separated Work Schedule Section */
+        .schedule-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 8px 12px;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+            max-height: 165px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Tables - Compact */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.72rem;
+        }
+
+        th {
+            background: var(--surface-hover);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 5px 6px;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 5px 6px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        tr:hover td {
+            background: var(--surface-hover);
+        }
+
+        /* Status Pills */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 1px 5px;
+            border-radius: 9999px;
+            font-size: 0.62rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-planned { background: #f1f5f9; color: var(--text-secondary); }
+        .status-progress { background: var(--warning-light); color: var(--warning); }
+        .status-completed { background: var(--success-light); color: var(--success); }
+        .status-delayed { background: var(--danger-light); color: var(--danger); }
+        .status-cancelled { background: #f1f5f9; color: var(--text-muted); }
+
+        /* Work Tabs for Individual S-Curve Charts */
+        .work-tabs {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            padding-bottom: 3px;
+            margin-bottom: 4px;
+        }
+
+        .work-tab-btn {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 0.62rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .work-tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 105px;
+            width: 100%;
+            margin-top: 1px;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 10px;
+            font-size: 0.62rem;
+            font-weight: 600;
+            justify-content: flex-end;
+            margin-bottom: 1px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .legend-color {
+            width: 8px;
+            height: 2px;
+            border-radius: 2px;
+        }
+
+        /* History Feed */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .history-month {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.72rem;
+        }
+
+        .history-stats {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.open .modal {
+            transform: scale(1);
+        }
+
+        .modal-large { max-width: 750px; }
+
+        .modal-header {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            padding: 12px 14px;
+        }
+
+        .modal-footer {
+            padding: 8px 14px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 5px;
+            background: var(--surface-hover);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        textarea.backup-textarea {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            font-size: 0.68rem;
+            background: var(--surface-hover);
+        }
+
+        /* Day Details */
+        .day-section {
+            margin-bottom: 8px;
+        }
+
+        .day-section-header {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .record-card {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 6px 8px;
+            margin-bottom: 4px;
+        }
+
+        .record-title {
+            font-weight: 600;
+            font-size: 0.72rem;
+            color: var(--text-main);
+            margin-bottom: 1px;
+        }
+
+        .record-meta {
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+        }
+
+        /* Toasts */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .toast {
+            background: var(--text-main);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .empty {
+            text-align: center;
+            padding: 10px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Header -->
+    <header>
+        <div class="header-title">
+            <h1>Construction Project Tracker</h1>
+            <p>Unified Management for Civil, TBM, and NATM Operations (Enhanced Material Tracker Active)</p>
+        </div>
+        <div class="header-controls">
+            <input type="month" id="monthPicker" onchange="selectMonth(this.value)">
+            <button class="btn btn-primary" onclick="openWorkModal()">+ Add Work</button>
+            <button class="btn btn-success" onclick="openProcessModal()">+ Process Log</button>
+            <button class="btn btn-warning" onclick="openMaterialModal()">+ Material</button>
+            <button class="btn btn-danger" onclick="openAccidentModal()">+ Accident</button>
+            <button class="btn btn-light" onclick="openBackupModal()">Backup</button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs (Dashboard vs Material List) -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" id="tabDashboardBtn" onclick="switchView('dashboard')">📊 Project Dashboard & Schedule</button>
+        <button class="nav-tab" id="tabMaterialsBtn" onclick="switchView('materials')">📦 Material Management & Delay Log</button>
+    </div>
+
+    <!-- VIEW 1: Dashboard View -->
+    <div id="dashboardView" style="display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0;">
+        <!-- Dashboard Quick Stats (Clickable) -->
+        <div class="dashboard-grid">
+            <div class="stat-card" onclick="filterByStatus('')" title="Click to view all works">
+                <div class="stat-label">Planned Works</div>
+                <div class="stat-value" id="statPlanned">0</div>
+            </div>
+            <div class="stat-card success" onclick="filterByStatus('Completed')" title="Click to view completed works">
+                <div class="stat-label">Completed</div>
+                <div class="stat-value" id="statCompleted">0</div>
+            </div>
+            <div class="stat-card warning" onclick="filterByStatus('In Progress')" title="Click to view in-progress works">
+                <div class="stat-label">In Progress</div>
+                <div class="stat-value" id="statProgress">0</div>
+            </div>
+            <div class="stat-card danger" onclick="filterByStatus('Delayed')" title="Click to view delayed works">
+                <div class="stat-label">Delayed</div>
+                <div class="stat-value" id="statDelayed">0</div>
+            </div>
+            <div class="stat-card success" onclick="filterByType('Deliveries')" title="Click to view deliveries">
+                <div class="stat-label">Deliveries</div>
+                <div class="stat-value" id="statDeliveries">0</div>
+            </div>
+            <div class="stat-card danger" onclick="filterByType('Accidents')" title="Click to view accidents">
+                <div class="stat-label">Accidents</div>
+                <div class="stat-value" id="statAccidents">0</div>
+            </div>
+        </div>
+
+        <!-- Main Layout Grid -->
+        <div class="main-layout">
+            <!-- Left Column: Calendar -->
+            <div class="left-column">
+                <div class="card" style="display:flex; flex-direction:column; flex-grow:1; min-height:0;">
+                    <div class="card-header">
+                        <h2 id="monthTitle">Monthly Calendar</h2>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn btn-small btn-light" onclick="changeMonth(-1)">◀ Prev</button>
+                            <button class="btn btn-small btn-light" onclick="goToCurrentMonth()">Current</button>
+                            <button class="btn btn-small btn-light" onclick="changeMonth(1)">Next ▶</button>
+                        </div>
+                    </div>
+                    <div class="calendar-wrapper" id="calendar"></div>
+                </div>
+            </div>
+
+            <!-- Right Column: Individual Work Progress Chart & History Feed -->
+            <div class="right-column">
+                <!-- Individual Work Progress Chart Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Work Progress Tracking</h2>
+                        <span id="saveStatus" style="font-size:0.58rem; color:var(--text-muted);">Auto-saved</span>
+                    </div>
+                    <div class="work-tabs" id="workTabsContainer">
+                        <!-- Populated dynamically -->
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><div class="legend-color" style="background:#0284c7;"></div> Planned Curve</div>
+                        <div class="legend-item"><div class="legend-color" style="background:#0d9488;"></div> Actual Progress</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="sCurveChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Historical Log Feed -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Historical Monthly Logs</h2>
+                    </div>
+                    <div class="history-list" id="historyContainer">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separated Work Schedule & Status Section -->
+        <div class="schedule-section">
+            <div class="card-header" style="margin-bottom:4px; padding-bottom:3px;">
+                <h2>Work Schedule & Status</h2>
+                <div style="display:flex; gap:6px; align-items:center;">
+                    <input type="text" id="workSearch" placeholder="Search works..." style="width: 140px;">
+                    <select id="workStatusFilter" style="width: 110px;">
+                        <option value="">All Statuses</option>
+                        <option value="Planned">Planned</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Delayed">Delayed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Color</th>
+                            <th>Work Name</th>
+                            <th>Type</th>
+                            <th>Planned Start</th>
+                            <th>Actual Start</th>
+                            <th>Planned End</th>
+                            <th>Actual End</th>
+                            <th>Subcontractor</th>
+                            <th>Crane</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workTableBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: Material List & Delay Tracker Page/Tab -->
+    <div id="materialsView" style="display: none; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0;">
+        <div class="card" style="display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0;">
+            <div class="card-header">
+                <h2>Material Master List & Delay Tracking</h2>
+                <div style="display:flex; gap:6px; align-items:center;">
+                    <input type="text" id="materialSearch" placeholder="Search materials or supplier..." style="width: 180px;">
+                    <select id="materialStatusFilter" style="width: 130px;" onchange="renderMaterialsTable()">
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Delayed">Delayed</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                    <button class="btn btn-warning" onclick="openMaterialModal()">+ Add Material</button>
+                </div>
+            </div>
+            <div class="table-responsive" style="max-height: calc(100vh - 160px);">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Material Name</th>
+                            <th>Qty / Unit</th>
+                            <th>Supplier</th>
+                            <th>Delivery Scope</th>
+                            <th>Arrival Date (CIF)</th>
+                            <th>Destination Yard</th>
+                            <th>Delay Count</th>
+                            <th>Status</th>
+                            <th>Delay Reason / Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materialsTableBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+
+<!-- Work Modal -->
+<div class="modal-overlay" id="workModal">
+<div class="modal modal-large">
+    <div class="modal-header">
+        <h2 id="workModalTitle">Add Work Item</h2>
+        <button class="modal-close" onclick="closeModal('workModal')">×</button>
+    </div>
+    <form id="workForm">
+        <div class="modal-body">
+            <input type="hidden" id="workId">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Work Type *</label>
+                    <select id="workType" required>
+                        <option value="Civil">Civil</option>
+                        <option value="TBM">TBM</option>
+                        <option value="NATM">NATM</option>
+                        <option value="MEP">MEP</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Work Name *</label>
+                    <input type="text" id="workName" required placeholder="e.g. Excavation Level 2">
+                </div>
+                <div class="form-group">
+                    <label>Work Badge / Accent Color *</label>
+                    <input type="color" id="workColor" value="#0284c7" style="height:30px; padding:2px;">
+                </div>
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select id="workStatus" required>
+                        <option value="Planned">Planned</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Delayed">Delayed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Planned Start Date *</label>
+                    <input type="date" id="workPlannedStart" required>
+                </div>
+                <div class="form-group">
+                    <label>Actual Start Date</label>
+                    <input type="date" id="workActualStart">
+                </div>
+                <div class="form-group">
+                    <label>Planned End Date *</label>
+                    <input type="date" id="workPlannedEnd" required>
+                </div>
+                <div class="form-group">
+                    <label>Actual End Date</label>
+                    <input type="date" id="workActualEnd">
+                </div>
+                <div class="form-group">
+                    <label>Subcontractor</label>
+                    <input type="text" id="workSubcontractor" placeholder="Company Name">
+                </div>
+                <div class="form-group">
+                    <label>Crane / Heavy Equipment</label>
+                    <select id="workCrane">
+                        <option value="No">No</option>
+                        <option value="Mobile Crane">Mobile Crane</option>
+                        <option value="Crawler Crane">Crawler Crane</option>
+                        <option value="Other Crane">Other Crane</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Delay Reason (if any)</label>
+                    <input type="text" id="workDelayReason" placeholder="Reason for delay...">
+                </div>
+                <div class="form-group full">
+                    <label>Notes / Remarks</label>
+                    <textarea id="workNotes" placeholder="Additional details..."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" onclick="closeModal('workModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Work Item</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- Process Log Modal -->
+<div class="modal-overlay" id="processModal">
+<div class="modal modal-large">
+    <div class="modal-header">
+        <h2 id="processModalTitle">Add Daily Process Log</h2>
+        <button class="modal-close" onclick="closeModal('processModal')">×</button>
+    </div>
+    <form id="processForm">
+        <div class="modal-body">
+            <input type="hidden" id="processId">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="processDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Associated Work *</label>
+                    <select id="processWork" required onchange="updateProcessSubtitleSuggestion()">
+                        <option value="">-- Select Work Item --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Work Subtitle / Milestone *</label>
+                    <input type="text" id="processSubtitle" required placeholder="e.g. Pouring Zone A Foundation">
+                </div>
+                <div class="form-group">
+                    <label>Progress Status *</label>
+                    <select id="processProgressStatus" required>
+                        <option value="Still in Progress">Still in Progress</option>
+                        <option value="Finished">Finished</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Field Engineer (FE) *</label>
+                    <input type="text" id="processFE" required placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label>Subcontractor *</label>
+                    <input type="text" id="processSubcontractor" required placeholder="Company Name">
+                </div>
+                <div class="form-group">
+                    <label>Manpower (Pax) *</label>
+                    <input type="number" id="processPax" min="0" required value="0">
+                </div>
+                <div class="form-group">
+                    <label>Alignment Status *</label>
+                    <select id="processAlignment" required>
+                        <option value="Aligned">Aligned</option>
+                        <option value="Minor Deviation">Minor Deviation</option>
+                        <option value="Delayed">Delayed / Misaligned</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Crane / Heavy Equipment</label>
+                    <select id="processCrane">
+                        <option value="No">No</option>
+                        <option value="Mobile Crane">Mobile Crane</option>
+                        <option value="Crawler Crane">Crawler Crane</option>
+                        <option value="Other Crane">Tower Crane</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Delay Reason</label>
+                    <input type="text" id="processDelayReason" placeholder="If applicable">
+                </div>
+                <div class="form-group full">
+                    <label>Daily Notes & Progress Summary</label>
+                    <textarea id="processNotes" placeholder="Work progress summary..."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" onclick="closeModal('processModal')">Cancel</button>
+            <button type="submit" class="btn btn-success">Save Process Log</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- Material Modal (Enhanced with Delay Count, Scope, CIF Date, and Yard) -->
+<div class="modal-overlay" id="materialModal">
+<div class="modal modal-large">
+    <div class="modal-header">
+        <h2 id="materialModalTitle">Add / Edit Material Delivery Record</h2>
+        <button class="modal-close" onclick="closeModal('materialModal')">×</button>
+    </div>
+    <form id="materialForm">
+        <div class="modal-body">
+            <input type="hidden" id="materialId">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Material Name / Item *</label>
+                    <input type="text" id="materialName" required placeholder="e.g. Steel Ribs, Rebar">
+                </div>
+                <div class="form-group">
+                    <label>Associated Work</label>
+                    <select id="materialWork">
+                        <option value="">-- None / General --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantity *</label>
+                    <input type="number" step="0.01" id="materialQuantity" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Unit *</label>
+                    <input type="text" id="materialUnit" required placeholder="e.g. ton, pcs, m3">
+                </div>
+                <div class="form-group">
+                    <label>Supplier *</label>
+                    <input type="text" id="materialSupplier" required placeholder="Supplier name">
+                </div>
+                <div class="form-group">
+                    <label>Delivery Scope *</label>
+                    <select id="materialScope" required>
+                        <option value="Whole">Whole Delivery</option>
+                        <option value="Partial">Partial Delivery</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Arrival Date on CIF *</label>
+                    <input type="date" id="materialCifDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Destination Yard *</label>
+                    <input type="text" id="materialYard" required placeholder="e.g. Yard A, North Storage">
+                </div>
+                <div class="form-group">
+                    <label>Delivery Status *</label>
+                    <select id="materialStatus" required onchange="toggleDelayFields()">
+                        <option value="Pending">Pending</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Delayed">Delayed</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="form-group" id="delayCountGroup">
+                    <label>Times Delayed (Delay Count)</label>
+                    <input type="number" id="materialDelayCount" min="0" value="0" placeholder="0">
+                </div>
+                <div class="form-group full" id="delayReasonGroup">
+                    <label>Delay Reason / Monitoring Note</label>
+                    <input type="text" id="materialDelayReason" placeholder="Reason for delay or daily update...">
+                </div>
+                <div class="form-group full">
+                    <label>Inspection Notes / Remarks</label>
+                    <textarea id="materialNotes" placeholder="Quality check, condition upon arrival, or special notes..."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" onclick="closeModal('materialModal')">Cancel</button>
+            <button type="submit" class="btn btn-warning">Save Material Item</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- Accident / Incident Modal -->
+<div class="modal-overlay" id="accidentModal">
+<div class="modal modal-large">
+    <div class="modal-header">
+        <h2 id="accidentModalTitle">Add Accident / Incident Report</h2>
+        <button class="modal-close" onclick="closeModal('accidentModal')">×</button>
+    </div>
+    <form id="accidentForm">
+        <div class="modal-body">
+            <input type="hidden" id="accidentId">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="accidentDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Associated Work</label>
+                    <select id="accidentWork">
+                        <option value="">-- None / General --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Location on Site *</label>
+                    <input type="text" id="accidentLocation" required placeholder="e.g. Shaft B, Tunnel Zone 3">
+                </div>
+                <div class="form-group">
+                    <label>Incident Type *</label>
+                    <select id="accidentType" required>
+                        <option value="Safety Incident">Safety Incident</option>
+                        <option value="Equipment Damage">Equipment Damage</option>
+                        <option value="Environmental">Environmental</option>
+                        <option value="Near Miss">Near Miss</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Severity *</label>
+                    <select id="accidentSeverity" required>
+                        <option value="Near Miss">Near Miss</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Severe">Severe</option>
+                        <option value="Fatal">Fatal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" id="dummyField">
+                </div>
+                <div class="form-group full">
+                    <label>Description & Corrective Action *</label>
+                    <textarea id="accidentDescription" required placeholder="What happened, injuries, property damage, and immediate corrective actions taken..."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" onclick="closeModal('accidentModal')">Cancel</button>
+            <button type="submit" class="btn btn-danger">Save Accident Report</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- Day Detail Modal -->
+<div class="modal-overlay" id="dayDetailModal">
+<div class="modal modal-large">
+    <div class="modal-header">
+        <h2 id="dayDetailTitle">Day Details</h2>
+        <button class="modal-close" onclick="closeModal('dayDetailModal')">×</button>
+    </div>
+    <div class="modal-body" id="dayDetailBody"></div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="openWorkModalFromDate()">+ Add Work</button>
+        <button type="button" class="btn btn-success" onclick="openProcessModalFromDate()">+ Add Process Log</button>
+        <button type="button" class="btn btn-warning" onclick="openMaterialModalFromDate()">+ Add Material</button>
+        <button type="button" class="btn btn-danger" onclick="openAccidentModalFromDate()">+ Add Accident</button>
+        <button type="button" class="btn btn-light" onclick="closeModal('dayDetailModal')">Close</button>
+    </div>
+</div>
+</div>
+
+<!-- Backup Modal -->
+<div class="modal-overlay" id="backupModal">
+<div class="modal modal-large">
+    <div class="modal-header">
+        <h2>Data Backup & Restore</h2>
+        <button class="modal-close" onclick="closeModal('backupModal')">×</button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group full">
+            <label>Export / Import JSON Data</label>
+            <textarea id="backupTextarea" class="backup-textarea" placeholder="JSON data will appear here..."></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('backupModal')">Cancel</button>
+        <button type="button" class="btn btn-light" onclick="copyBackupData()">Copy JSON</button>
+        <button type="button" class="btn btn-primary" onclick="importData()">Import JSON</button>
+        <button type="button" class="btn btn-success" onclick="exportData()">Download Backup</button>
+        <button type="button" class="btn btn-warning" onclick="document.getElementById('restoreFileInput').click()">Restore File</button>
+        <input type="file" id="restoreFileInput" accept=".json,application/json" style="display:none;">
+    </div>
+</div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// State Management
+let state = {
+    currentYear: 2026,
+    currentMonth: 9, // October (0-indexed)
+    selectedDate: null,
+    selectedWorkTabId: null,
+    tableTypeFilter: '',
+    currentView: 'dashboard', // 'dashboard' or 'materials'
+    works: [],
+    processes: [],
+    materials: [],
+    accidents: []
+};
+
+// LocalStorage Key
+const STORAGE_KEY = 'construction_tracker_data_v12';
+
+// Initialize App
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    initMonthPicker();
+    renderAll();
+    setupEventListeners();
+});
+
+function setupEventListeners() {
+    document.getElementById('workForm').addEventListener('submit', handleSaveWork);
+    document.getElementById('processForm').addEventListener('submit', handleSaveProcess);
+    document.getElementById('materialForm').addEventListener('submit', handleSaveMaterial);
+    document.getElementById('accidentForm').addEventListener('submit', handleSaveAccident);
+
+    document.getElementById('workSearch').addEventListener('input', () => {
+        state.tableTypeFilter = '';
+        renderWorkTable();
+    });
+    document.getElementById('workStatusFilter').addEventListener('change', () => {
+        state.tableTypeFilter = '';
+        renderWorkTable();
+    });
+
+    document.getElementById('materialSearch').addEventListener('input', () => {
+        renderMaterialsTable();
+    });
+
+    // Close modals by clicking dark overlay or pressing Escape
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', event => {
+            if (event.target === overlay) overlay.classList.remove('open');
+        });
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open').forEach(modal => modal.classList.remove('open'));
+        }
+    });
+
+    document.getElementById('restoreFileInput').addEventListener('change', restoreFromFile);
+}
+
+// View Switcher (Dashboard vs Materials Tab)
+function switchView(viewName) {
+    state.currentView = viewName;
+    const dashView = document.getElementById('dashboardView');
+    const matView = document.getElementById('materialsView');
+    const dashBtn = document.getElementById('tabDashboardBtn');
+    const matBtn = document.getElementById('tabMaterialsBtn');
+
+    if (viewName === 'materials') {
+        dashView.style.display = 'none';
+        matView.style.display = 'flex';
+        dashBtn.classList.remove('active');
+        matBtn.classList.add('active');
+        renderMaterialsTable();
+    } else {
+        dashView.style.display = 'flex';
+        matView.style.display = 'none';
+        dashBtn.classList.add('active');
+        matBtn.classList.remove('active');
+        renderAll();
+    }
+}
+
+// Data Persistence
+function saveData() {
+    try {
+        const payload = {
+            version: 13,
+            savedAt: new Date().toISOString(),
+            works: state.works,
+            processes: state.processes,
+            materials: state.materials,
+            accidents: state.accidents
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        showSaveStatus('Saved');
+    } catch (e) {
+        showToast('Error saving data', 'error');
+        showSaveStatus('Failed');
+    }
+}
+
+function loadData() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            state.works = parsed.works || [];
+            state.processes = parsed.processes || [];
+            state.materials = parsed.materials || [];
+            state.accidents = parsed.accidents || [];
+        } else {
+            loadDefaultMockData();
+        }
+    } catch (e) {
+        console.warn('Could not load saved tracker data:', e);
+        state.works = [];
+        state.processes = [];
+        state.materials = [];
+        state.accidents = [];
+        loadDefaultMockData();
+    }
+    if (state.works.length > 0 && !state.selectedWorkTabId) {
+        state.selectedWorkTabId = state.works[0].id;
+    }
+}
+
+function loadDefaultMockData() {
+    const y = state.currentYear;
+    const m = String(state.currentMonth + 1).padStart(2, '0');
+    state.works = [
+        { id: 'w1', type: 'Civil', name: 'Site Mobilization & Setup', color: '#0284c7', plannedStart: `${y}-${m}-02`, actualStart: `${y}-${m}-02`, plannedEnd: `${y}-${m}-04`, actualEnd: `${y}-${m}-04`, subcontractor: 'Alpha Builders', crane: 'No', status: 'Completed', delayReason: '', notes: 'Completed ahead of schedule.' },
+        { id: 'w2', type: 'TBM', name: 'Shaft Excavation Level 1', color: '#7e22ce', plannedStart: `${y}-${m}-05`, actualStart: `${y}-${m}-06`, plannedEnd: `${y}-${m}-12`, actualEnd: '', subcontractor: 'Beta Underground', crane: 'Mobile Crane', status: 'In Progress', delayReason: 'Weather condition', notes: 'Minor rain delay.' },
+        { id: 'w3', type: 'NATM', name: 'Tunnel Ring Installation', color: '#0d9488', plannedStart: `${y}-${m}-14`, actualStart: '', plannedEnd: `${y}-${m}-26`, actualEnd: '', subcontractor: 'Beta Underground', crane: 'Crawler Crane', status: 'Planned', delayReason: '', notes: 'Scheduled upcoming.' }
+    ];
+    state.processes = [
+        { id: 'p1', date: `${y}-${m}-02`, workId: 'w1', subtitle: 'Initial perimeter fencing', progressStatus: 'Finished', fe: 'Mark Smith', subcontractor: 'Alpha Builders', pax: 15, alignment: 'Aligned', crane: 'No', delayReason: '', notes: 'Good progress made today.' }
+    ];
+    state.materials = [
+        { id: 'm1', date: `${y}-${m}-04`, workId: 'w2', name: 'Steel Ribs & Rebar', quantity: 50, unit: 'ton', supplier: 'SteelCorp', status: 'Delivered', scope: 'Whole', cifDate: `${y}-${m}-04`, yard: 'Yard A', delayCount: 0, delayReason: '', notes: 'Received in good condition.' },
+        { id: 'm2', date: `${y}-${m}-08`, workId: 'w3', name: 'Shotcrete Accelerant', quantity: 120, unit: 'bags', supplier: 'ChemSupply', status: 'Delayed', scope: 'Partial', cifDate: `${y}-${m}-08`, yard: 'Yard B', delayCount: 2, delayReason: 'Customs port inspection hold', notes: 'Awaiting customs release.' }
+    ];
+    state.accidents = [];
+    state.selectedWorkTabId = 'w1';
+    saveData();
+}
+
+function showSaveStatus(msg) {
+    const el = document.getElementById('saveStatus');
+    if (el) el.textContent = msg;
+    setTimeout(() => { if (el) el.textContent = 'Auto-saved'; }, 2000);
+}
+
+// Navigation & Dates
+function initMonthPicker() {
+    updateMonthPickerInput();
+}
+
+function updateMonthPickerInput() {
+    const picker = document.getElementById('monthPicker');
+    const mStr = String(state.currentMonth + 1).padStart(2, '0');
+    picker.value = `${state.currentYear}-${mStr}`;
+}
+
+function selectMonth(val) {
+    if (!val) return;
+    const parts = val.split('-');
+    state.currentYear = parseInt(parts[0], 10);
+    state.currentMonth = parseInt(parts[1], 10) - 1;
+    renderAll();
+}
+
+function changeMonth(dir) {
+    state.currentMonth += dir;
+    if (state.currentMonth > 11) {
+        state.currentMonth = 0;
+        state.currentYear++;
+    } else if (state.currentMonth < 0) {
+        state.currentMonth = 11;
+        state.currentYear--;
+    }
+    updateMonthPickerInput();
+    renderAll();
+}
+
+function goToCurrentMonth() {
+    const now = new Date();
+    state.currentYear = now.getFullYear();
+    state.currentMonth = now.getMonth();
+    updateMonthPickerInput();
+    renderAll();
+}
+
+// Render Engine
+function renderAll() {
+    renderMonthTitle();
+    renderStats();
+    renderWorkTabs();
+    renderSCurveChart();
+    renderCalendar();
+    renderWorkTable();
+    renderHistory();
+    renderMaterialsTable();
+    populateWorkDropdowns();
+}
+
+function renderMonthTitle() {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    document.getElementById('monthTitle').textContent = `${months[state.currentMonth]} ${state.currentYear}`;
+}
+
+function getMonthFilterString() {
+    const mStr = String(state.currentMonth + 1).padStart(2, '0');
+    return `${state.currentYear}-${mStr}`;
+}
+
+function renderStats() {
+    const mPrefix = getMonthFilterString();
+    const monthWorks = state.works.filter(w => (w.plannedStart && w.plannedStart.startsWith(mPrefix)) || (w.plannedEnd && w.plannedEnd.startsWith(mPrefix)));
+    const monthProcesses = state.processes.filter(p => p.date && p.date.startsWith(mPrefix));
+    const monthMaterials = state.materials.filter(mat => (mat.cifDate && mat.cifDate.startsWith(mPrefix)) || (mat.date && mat.date.startsWith(mPrefix)));
+    const monthAccidents = state.accidents.filter(a => a.date && a.date.startsWith(mPrefix));
+
+    const plannedCount = monthWorks.length;
+    const executedCount = monthWorks.filter(w => w.actualEnd).length;
+    const progressCount = monthWorks.filter(w => w.status === 'In Progress').length;
+    const delayedCount = monthWorks.filter(w => w.status === 'Delayed' || monthProcesses.filter(p => p.alignment === 'Delayed').length > 0 || monthMaterials.filter(m => m.status === 'Delayed').length > 0).length;
+
+    document.getElementById('statPlanned').textContent = plannedCount;
+    document.getElementById('statCompleted').textContent = executedCount;
+    document.getElementById('statProgress').textContent = progressCount;
+    document.getElementById('statDelayed').textContent = delayedCount;
+    document.getElementById('statDeliveries').textContent = monthMaterials.length;
+    document.getElementById('statAccidents').textContent = monthAccidents.length;
+}
+
+// Clickable Status Filter integration
+function filterByStatus(statusVal) {
+    document.getElementById('workStatusFilter').value = statusVal;
+    renderWorkTable();
+    document.querySelector('.schedule-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function filterByType(typeVal) {
+    document.getElementById('workSearch').value = '';
+    document.getElementById('workStatusFilter').value = '';
+    state.tableTypeFilter = typeVal || '';
+    renderWorkTable();
+    document.querySelector('.schedule-section').scrollIntoView({ behavior: 'smooth' });
+    showToast(
+        typeVal === 'Deliveries'
+            ? `Showing works with material deliveries`
+            : typeVal === 'Accidents'
+                ? `Showing works with accident / incident records`
+                : 'Showing all works',
+        'success'
+    );
+}
+
+// Work Tabs for Individual Charts
+function renderWorkTabs() {
+    const container = document.getElementById('workTabsContainer');
+    if (!container) return;
+
+    if (state.works.length === 0) {
+        container.innerHTML = `<span style="font-size:0.62rem; color:var(--text-muted);">No works available.</span>`;
+        return;
+    }
+
+    if (!state.selectedWorkTabId || !state.works.some(w => w.id === state.selectedWorkTabId)) {
+        state.selectedWorkTabId = state.works[0].id;
+    }
+
+    let html = '';
+    state.works.forEach(w => {
+        const isActive = w.id === state.selectedWorkTabId ? 'active' : '';
+        html += `<button class="work-tab-btn ${isActive}" onclick="selectWorkTab('${w.id}')">
+            <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${w.color || '#0284c7'};margin-right:3px;"></span>
+            ${escapeHtml(w.name)}
+        </button>`;
+    });
+    container.innerHTML = html;
+}
+
+function selectWorkTab(id) {
+    state.selectedWorkTabId = id;
+    renderWorkTabs();
+    renderSCurveChart();
+}
+
+// Individual Work Progress S-Curve Chart
+function renderSCurveChart() {
+    const canvas = document.getElementById('sCurveChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const width = canvas.parentElement.clientWidth;
+    const height = canvas.parentElement.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const year = state.currentYear;
+    const month = state.currentMonth;
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    const currentWork = state.works.find(w => w.id === state.selectedWorkTabId);
+    const workColor = currentWork ? (currentWork.color || '#0284c7') : '#0284c7';
+
+    const plannedCurve = [];
+    const actualCurve = [];
+
+    let startDay = 1;
+    let endDay = totalDays;
+
+    if (currentWork) {
+        const pStart = currentWork.plannedStart ? new Date(currentWork.plannedStart) : null;
+        const pEnd = currentWork.plannedEnd ? new Date(currentWork.plannedEnd) : null;
+        if (pStart && pEnd) {
+            startDay = pStart.getDate();
+            endDay = pEnd.getDate();
+        }
+    }
+
+    const spanDays = Math.max(endDay - startDay, 1);
+
+    for (let day = 1; day <= totalDays; day++) {
+        let plannedVal = 0;
+        if (day >= startDay && day <= endDay) {
+            plannedVal = Math.round(((day - startDay) / spanDays) * 100);
+        } else if (day > endDay) {
+            plannedVal = 100;
+        }
+        plannedCurve.push(Math.min(plannedVal, 100));
+
+        const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const workLogs = state.processes.filter(p => p.workId === currentWork?.id && p.date <= dStr);
+        const hasFinished = workLogs.some(p => p.progressStatus === 'Finished');
+        
+        let actualVal = 0;
+        if (hasFinished || (currentWork && currentWork.actualEnd && dStr >= currentWork.actualEnd)) {
+            actualVal = 100;
+        } else if (workLogs.length > 0) {
+            actualVal = Math.min(Math.round((workLogs.length / Math.max(spanDays, 1)) * 100), 90);
+        }
+        actualCurve.push(actualVal);
+    }
+
+    const paddingX = 22;
+    const paddingY = 12;
+    const chartW = width - paddingX * 2;
+    const chartH = height - paddingY * 2 - 6;
+
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+        const y = paddingY + (chartH / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(paddingX, y);
+        ctx.lineTo(width - paddingX, y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '7px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(`${100 - i * 25}%`, paddingX - 3, y + 3);
+    }
+
+    function drawLine(dataPoints, color, isDashed = false) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        if (isDashed) {
+            ctx.setLineDash([3, 3]);
+        } else {
+            ctx.setLineDash([]);
+        }
+        ctx.beginPath();
+
+        const stepX = chartW / (totalDays - 1 || 1);
+
+        dataPoints.forEach((val, i) => {
+            const x = paddingX + i * stepX;
+            const y = paddingY + chartH - (val / 100) * chartH;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    drawLine(plannedCurve, workColor, true);
+    drawLine(actualCurve, '#0d9488', false);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '7px "Plus Jakarta Sans", sans-serif';
+    ctx.textAlign = 'center';
+    const stepX = chartW / (totalDays - 1 || 1);
+    for (let day = 1; day <= totalDays; day += 7) {
+        const x = paddingX + (day - 1) * stepX;
+        ctx.fillText(day, x, height - 1);
+    }
+}
+
+// Calendar Generation
+function renderCalendar() {
+    const container = document.getElementById('calendar');
+    const year = state.currentYear;
+    const month = state.currentMonth;
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startingDayOfWeek = firstDay.getDay(); 
+    const totalDays = lastDay.getDate();
+
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let html = '<div class="calendar-grid">';
+
+    weekdays.forEach(wd => {
+        html += `<div class="calendar-weekday">${wd}</div>`;
+    });
+
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+        const dNum = prevMonthLastDay - i;
+        html += `<div class="calendar-day other-month"><div class="day-number">${dNum}</div></div>`;
+    }
+
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+    for (let day = 1; day <= totalDays; day++) {
+        const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isToday = (dStr === todayStr) ? 'today' : '';
+
+        const dayWorks = state.works.filter(w => {
+            const start = w.plannedStart || w.actualStart;
+            const end = w.plannedEnd || w.actualEnd || start;
+            return start && end && dStr >= start && dStr <= end;
+        });
+
+        const dayProcesses = state.processes.filter(p => p.date === dStr);
+        const dayMaterials = state.materials.filter(m => m.cifDate === dStr || m.date === dStr);
+        const dayAccidents = state.accidents.filter(a => a.date === dStr);
+
+        html += `<div class="calendar-day ${isToday}" onclick="openDayDetail('${dStr}')">`;
+        html += `<div class="day-number">${day}</div>`;
+        html += `<div class="day-items">`;
+
+        dayWorks.slice(0, 1).forEach(w => {
+            const wColor = w.color || '#0284c7';
+            html += `<div class="day-badge" style="background:${wColor}20; color:${wColor}; border-left: 2px solid ${wColor};" title="${w.name}">📋 ${w.name}</div>`;
+        });
+        dayProcesses.slice(0, 1).forEach(p => {
+            html += `<div class="day-badge" style="background:#f3e8ff; color:#7e22ce; border-left: 2px solid #7e22ce;" title="Process">⚙️ ${escapeHtml(p.subtitle || 'Process')}</div>`;
+        });
+        dayMaterials.slice(0, 1).forEach(m => {
+            const mBg = m.status === 'Delayed' ? '#fff1f2' : '#f0fdfa';
+            const mColor = m.status === 'Delayed' ? '#e11d48' : '#0f766e';
+            html += `<div class="day-badge" style="background:${mBg}; color:${mColor}; border-left: 2px solid ${mColor};" title="Material: ${m.name} (${m.status})">📦 ${escapeHtml(m.name)}</div>`;
+        });
+        dayAccidents.slice(0, 1).forEach(a => {
+            html += `<div class="day-badge" style="background:#fff1f2; color:#be123c; border-left: 2px solid #e11d48;" title="Accident">⚠ Accident</div>`;
+        });
+
+        const totalCount = dayWorks.length + dayProcesses.length + dayMaterials.length + dayAccidents.length;
+        if (totalCount > 2) {
+            html += `<div class="day-badge" style="background:#e2e8f0;color:#0f172a;justify-content:center;">+${totalCount - 2} more</div>`;
+        }
+
+        html += `</div></div>`;
+    }
+
+    const totalCellsSoFar = startingDayOfWeek + totalDays;
+    const remainingCells = (totalCellsSoFar % 7 === 0) ? 0 : (7 - (totalCellsSoFar % 7));
+    for (let i = 1; i <= remainingCells; i++) {
+        html += `<div class="calendar-day other-month"><div class="day-number">${i}</div></div>`;
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// Work Table Rendering
+function renderWorkTable() {
+    const tbody = document.getElementById('workTableBody');
+    const search = document.getElementById('workSearch').value.toLowerCase();
+    const statusFilter = document.getElementById('workStatusFilter').value;
+    const mPrefix = getMonthFilterString();
+
+    const filtered = state.works.filter(w => {
+        const matchesMonth =
+            (w.plannedStart && w.plannedStart.startsWith(mPrefix)) ||
+            (w.plannedEnd && w.plannedEnd.startsWith(mPrefix)) ||
+            (w.actualStart && w.actualStart.startsWith(mPrefix)) ||
+            (w.actualEnd && w.actualEnd.startsWith(mPrefix));
+
+        const matchStatus = !statusFilter || w.status === statusFilter;
+
+        const matchSearch = !search ||
+            (w.name || '').toLowerCase().includes(search) ||
+            (w.type || '').toLowerCase().includes(search) ||
+            (w.subcontractor || '').toLowerCase().includes(search);
+
+        let matchType = true;
+        if (state.tableTypeFilter === 'Deliveries') {
+            matchType = state.materials.some(m => m.workId === w.id);
+        } else if (state.tableTypeFilter === 'Accidents') {
+            matchType = state.accidents.some(a => a.workId === w.id);
+        }
+
+        return matchesMonth && matchStatus && matchSearch && matchType;
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" class="empty">No work records found for this filter/period.</td></tr>`;
+        return;
+    }
+
+    let html = '';
+    filtered.forEach(w => {
+        let badgeClass = 'status-planned';
+        if (w.status === 'In Progress') badgeClass = 'status-progress';
+        else if (w.status === 'Completed') badgeClass = 'status-completed';
+        else if (w.status === 'Delayed') badgeClass = 'status-delayed';
+        else if (w.status === 'Cancelled') badgeClass = 'status-cancelled';
+
+        const colorVal = w.color || '#0284c7';
+
+        html += `<tr>
+            <td><div style="width:12px;height:12px;border-radius:3px;background:${colorVal};"></div></td>
+            <td><strong>${escapeHtml(w.name)}</strong></td>
+            <td>${escapeHtml(w.type)}</td>
+            <td>${w.plannedStart || '-'}</td>
+            <td>${w.actualStart || '-'}</td>
+            <td>${w.plannedEnd || '-'}</td>
+            <td>${w.actualEnd || '-'}</td>
+            <td>${escapeHtml(w.subcontractor || '-')}</td>
+            <td>${escapeHtml(w.crane || 'No')}</td>
+            <td><span class="status ${badgeClass}">${w.status}</span></td>
+            <td>
+                <button class="btn btn-small btn-light" onclick="editWork('${w.id}')">Edit</button>
+                <button class="btn btn-small btn-danger" onclick="deleteWork('${w.id}')">Del</button>
+            </td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+// Materials List Table Rendering
+function renderMaterialsTable() {
+    const tbody = document.getElementById('materialsTableBody');
+    if (!tbody) return;
+
+    const search = document.getElementById('materialSearch').value.toLowerCase();
+    const statusFilter = document.getElementById('materialStatusFilter').value;
+
+    const filtered = state.materials.filter(m => {
+        const matchStatus = !statusFilter || m.status === statusFilter;
+        const matchSearch = !search ||
+            (m.name || '').toLowerCase().includes(search) ||
+            (m.supplier || '').toLowerCase().includes(search) ||
+            (m.yard || '').toLowerCase().includes(search);
+        return matchStatus && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="empty">No material records found.</td></tr>`;
+        return;
+    }
+
+    let html = '';
+    filtered.forEach(m => {
+        let badgeClass = 'status-planned';
+        if (m.status === 'Delivered') badgeClass = 'status-completed';
+        else if (m.status === 'Delayed') badgeClass = 'status-delayed';
+        else if (m.status === 'Rejected') badgeClass = 'status-cancelled';
+        else if (m.status === 'Pending') badgeClass = 'status-progress';
+
+        const scopeBadge = m.scope === 'Partial' 
+            ? `<span class="status status-progress">Partial</span>` 
+            : `<span class="status status-completed">Whole</span>`;
+
+        html += `<tr>
+            <td><strong>${escapeHtml(m.name)}</strong></td>
+            <td>${m.quantity} ${escapeHtml(m.unit)}</td>
+            <td>${escapeHtml(m.supplier || '-')}</td>
+            <td>${scopeBadge}</td>
+            <td>${m.cifDate || m.date || '-'}</td>
+            <td>${escapeHtml(m.yard || '-')}</td>
+            <td><strong style="color: ${m.delayCount > 0 ? 'var(--danger)' : 'inherit'};">${m.delayCount || 0}</strong></td>
+            <td><span class="status ${badgeClass}">${m.status}</span></td>
+            <td>${escapeHtml(m.delayReason || m.notes || '-')}</td>
+            <td>
+                <button class="btn btn-small btn-light" onclick="editMaterial('${m.id}')">Edit</button>
+                <button class="btn btn-small btn-danger" onclick="deleteMaterial('${m.id}')">Del</button>
+            </td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+// History Grid
+function renderHistory() {
+    const container = document.getElementById('historyContainer');
+    const monthsMap = {};
+    state.works.forEach(w => {
+        const dateRef = w.plannedStart || w.plannedEnd;
+        if (!dateRef) return;
+        const mKey = dateRef.substring(0, 7);
+        if (!monthsMap[mKey]) monthsMap[mKey] = { planned: 0, completed: 0, delayed: 0 };
+        monthsMap[mKey].planned++;
+        if (w.status === 'Completed' || w.actualEnd) monthsMap[mKey].completed++;
+        if (w.status === 'Delayed') monthsMap[mKey].delayed++;
+    });
+
+    const keys = Object.keys(monthsMap).sort().reverse();
+    if (keys.length === 0) {
+        container.innerHTML = `<div class="empty">No historical records available.</div>`;
+        return;
+    }
+
+    let html = '';
+    keys.forEach(k => {
+        const stats = monthsMap[k];
+        const pct = stats.planned > 0 ? Math.round((stats.completed / stats.planned) * 100) : 0;
+        html += `<div class="history-item">
+            <div>
+                <div class="history-month">${k}</div>
+                <div class="history-stats">
+                    Planned: <strong>${stats.planned}</strong> | Completed: <strong>${stats.completed}</strong> | Rate: <strong>${pct}%</strong>
+                </div>
+            </div>
+            <button class="btn btn-small btn-light" onclick="jumpToMonth('${k}')">View</button>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function jumpToMonth(ymStr) {
+    const parts = ymStr.split('-');
+    state.currentYear = parseInt(parts[0], 10);
+    state.currentMonth = parseInt(parts[1], 10) - 1;
+    updateMonthPickerInput();
+    renderAll();
+}
+
+// Modal Controllers
+function openModal(id) {
+    document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+}
+
+function getCurrentDateStr() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+}
+
+function openWorkModal() {
+    document.getElementById('workModalTitle').textContent = 'Add Work';
+    document.getElementById('workForm').reset();
+    document.getElementById('workId').value = '';
+    document.getElementById('workColor').value = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    const today = state.selectedDate || getCurrentDateStr();
+    document.getElementById('workPlannedStart').value = today;
+    document.getElementById('workPlannedEnd').value = today;
+    openModal('workModal');
+}
+
+function openProcessModal() {
+    document.getElementById('processModalTitle').textContent = 'Add Daily Process Log';
+    document.getElementById('processForm').reset();
+    document.getElementById('processId').value = '';
+    document.getElementById('processDate').value = state.selectedDate || getCurrentDateStr();
+    populateWorkDropdowns();
+    openModal('processModal');
+}
+
+function openMaterialModal() {
+    document.getElementById('materialModalTitle').textContent = 'Add Material Delivery Record';
+    document.getElementById('materialForm').reset();
+    document.getElementById('materialId').value = '';
+    document.getElementById('materialCifDate').value = state.selectedDate || getCurrentDateStr();
+    document.getElementById('materialDelayCount').value = 0;
+    document.getElementById('materialScope').value = 'Whole';
+    populateWorkDropdowns();
+    openModal('materialModal');
+}
+
+function toggleDelayFields() {
+    const status = document.getElementById('materialStatus').value;
+    const delayCountInput = document.getElementById('materialDelayCount');
+    if (status === 'Delayed' && parseInt(delayCountInput.value || '0') === 0) {
+        delayCountInput.value = 1;
+    }
+}
+
+function openAccidentModal() {
+    document.getElementById('accidentModalTitle').textContent = 'Add Accident / Incident';
+    document.getElementById('accidentForm').reset();
+    document.getElementById('accidentId').value = '';
+    document.getElementById('accidentDate').value = state.selectedDate || getCurrentDateStr();
+    populateWorkDropdowns();
+    openModal('accidentModal');
+}
+
+function openWorkModalFromDate() { closeModal('dayDetailModal'); openWorkModal(); }
+function openProcessModalFromDate() { closeModal('dayDetailModal'); openProcessModal(); }
+function openMaterialModalFromDate() { closeModal('dayDetailModal'); openMaterialModal(); }
+function openAccidentModalFromDate() { closeModal('dayDetailModal'); openAccidentModal(); }
+
+function populateWorkDropdowns() {
+    const selects = ['processWork', 'materialWork', 'accidentWork'];
+    let options = `<option value="">-- Select Work Item --</option>`;
+    state.works.forEach(w => {
+        options += `<option value="${w.id}">${escapeHtml(w.type)}: ${escapeHtml(w.name)}</option>`;
+    });
+    selects.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = options;
+    });
+}
+
+function updateProcessSubtitleSuggestion() {
+    const workId = document.getElementById('processWork').value;
+    const work = state.works.find(w => w.id === workId);
+    if (work && !document.getElementById('processSubtitle').value) {
+        document.getElementById('processSubtitle').value = work.name + ' Progress';
+    }
+}
+
+// Form Handlers
+function handleSaveWork(e) {
+    e.preventDefault();
+    const id = document.getElementById('workId').value || 'w_' + Date.now();
+    const work = {
+        id,
+        type: document.getElementById('workType').value,
+        name: document.getElementById('workName').value,
+        color: document.getElementById('workColor').value,
+        plannedStart: document.getElementById('workPlannedStart').value,
+        actualStart: document.getElementById('workActualStart').value,
+        plannedEnd: document.getElementById('workPlannedEnd').value,
+        actualEnd: document.getElementById('workActualEnd').value,
+        subcontractor: document.getElementById('workSubcontractor').value,
+        crane: document.getElementById('workCrane').value,
+        status: document.getElementById('workStatus').value,
+        delayReason: document.getElementById('workDelayReason').value,
+        notes: document.getElementById('workNotes').value
+    };
+
+    const idx = state.works.findIndex(w => w.id === id);
+    if (idx >= 0) state.works[idx] = work;
+    else {
+        state.works.push(work);
+        state.selectedWorkTabId = work.id;
+    }
+
+    saveData();
+    closeModal('workModal');
+    renderAll();
+    showToast('Work saved successfully', 'success');
+}
+
+function handleSaveProcess(e) {
+    e.preventDefault();
+    const id = document.getElementById('processId').value || 'p_' + Date.now();
+    const proc = {
+        id,
+        date: document.getElementById('processDate').value,
+        workId: document.getElementById('processWork').value,
+        subtitle: document.getElementById('processSubtitle').value,
+        progressStatus: document.getElementById('processProgressStatus').value,
+        fe: document.getElementById('processFE').value,
+        subcontractor: document.getElementById('processSubcontractor').value,
+        pax: parseInt(document.getElementById('processPax').value, 10) || 0,
+        alignment: document.getElementById('processAlignment').value,
+        crane: document.getElementById('processCrane').value,
+        delayReason: document.getElementById('processDelayReason').value,
+        notes: document.getElementById('processNotes').value
+    };
+
+    const idx = state.processes.findIndex(p => p.id === id);
+    if (idx >= 0) state.processes[idx] = proc;
+    else state.processes.push(proc);
+
+    saveData();
+    closeModal('processModal');
+    renderAll();
+    if (state.selectedDate) openDayDetail(state.selectedDate);
+    showToast('Process log saved successfully', 'success');
+}
+
+function handleSaveMaterial(e) {
+    e.preventDefault();
+    const id = document.getElementById('materialId').value || 'm_' + Date.now();
+    const mat = {
+        id,
+        name: document.getElementById('materialName').value,
+        workId: document.getElementById('materialWork').value,
+        quantity: parseFloat(document.getElementById('materialQuantity').value) || 0,
+        unit: document.getElementById('materialUnit').value,
+        supplier: document.getElementById('materialSupplier').value,
+        scope: document.getElementById('materialScope').value,
+        cifDate: document.getElementById('materialCifDate').value,
+        date: document.getElementById('materialCifDate').value, // compatibility fallback
+        yard: document.getElementById('materialYard').value,
+        status: document.getElementById('materialStatus').value,
+        delayCount: parseInt(document.getElementById('materialDelayCount').value, 10) || 0,
+        delayReason: document.getElementById('materialDelayReason').value,
+        notes: document.getElementById('materialNotes').value
+    };
+
+    const idx = state.materials.findIndex(m => m.id === id);
+    if (idx >= 0) state.materials[idx] = mat;
+    else state.materials.push(mat);
+
+    saveData();
+    closeModal('materialModal');
+    renderAll();
+    if (state.selectedDate) openDayDetail(state.selectedDate);
+    showToast('Material record saved successfully', 'success');
+}
+
+function handleSaveAccident(e) {
+    e.preventDefault();
+    const id = document.getElementById('accidentId').value || 'a_' + Date.now();
+    const acc = {
+        id,
+        date: document.getElementById('accidentDate').value,
+        workId: document.getElementById('accidentWork').value,
+        location: document.getElementById('accidentLocation').value,
+        type: document.getElementById('accidentType').value,
+        severity: document.getElementById('accidentSeverity').value,
+        description: document.getElementById('accidentDescription').value
+    };
+
+    const idx = state.accidents.findIndex(a => a.id === id);
+    if (idx >= 0) state.accidents[idx] = acc;
+    else state.accidents.push(acc);
+
+    saveData();
+    closeModal('accidentModal');
+    renderAll();
+    if (state.selectedDate) openDayDetail(state.selectedDate);
+    showToast('Accident report recorded', 'error');
+}
+
+function editWork(id) {
+    const w = state.works.find(item => item.id === id);
+    if (!w) return;
+    document.getElementById('workModalTitle').textContent = 'Edit Work';
+    document.getElementById('workId').value = w.id;
+    document.getElementById('workType').value = w.type;
+    document.getElementById('workName').value = w.name;
+    document.getElementById('workColor').value = w.color || '#0284c7';
+    document.getElementById('workPlannedStart').value = w.plannedStart || '';
+    document.getElementById('workActualStart').value = w.actualStart || '';
+    document.getElementById('workPlannedEnd').value = w.plannedEnd || '';
+    document.getElementById('workActualEnd').value = w.actualEnd || '';
+    document.getElementById('workSubcontractor').value = w.subcontractor || '';
+    document.getElementById('workCrane').value = w.crane || 'No';
+    document.getElementById('workStatus').value = w.status;
+    document.getElementById('workDelayReason').value = w.delayReason || '';
+    document.getElementById('workNotes').value = w.notes || '';
+    openModal('workModal');
+}
+
+function deleteWork(id) {
+    if (!confirm('Are you sure you want to delete this work item?')) return;
+    state.works = state.works.filter(w => w.id !== id);
+    saveData();
+    renderAll();
+    showToast('Work deleted', 'success');
+}
+
+function editProcess(id) {
+    const p = state.processes.find(item => item.id === id);
+    if (!p) return;
+    document.getElementById('processModalTitle').textContent = 'Edit Daily Process Log';
+    document.getElementById('processId').value = p.id;
+    document.getElementById('processDate').value = p.date || '';
+    document.getElementById('processWork').value = p.workId || '';
+    document.getElementById('processSubtitle').value = p.subtitle || '';
+    document.getElementById('processProgressStatus').value = p.progressStatus || 'Still in Progress';
+    document.getElementById('processFE').value = p.fe || '';
+    document.getElementById('processSubcontractor').value = p.subcontractor || '';
+    document.getElementById('processPax').value = p.pax || 0;
+    document.getElementById('processAlignment').value = p.alignment || 'Aligned';
+    document.getElementById('processCrane').value = p.crane || 'No';
+    document.getElementById('processDelayReason').value = p.delayReason || '';
+    document.getElementById('processNotes').value = p.notes || '';
+    closeModal('dayDetailModal');
+    openModal('processModal');
+}
+
+function deleteProcess(id) {
+    if (!confirm('Are you sure you want to delete this process log?')) return;
+    state.processes = state.processes.filter(p => p.id !== id);
+    saveData();
+    renderAll();
+    if (state.selectedDate) openDayDetail(state.selectedDate);
+    showToast('Process log deleted', 'success');
+}
+
+function editMaterial(id) {
+    const m = state.materials.find(item => item.id === id);
+    if (!m) return;
+    document.getElementById('materialModalTitle').textContent = 'Edit Material Delivery Record';
+    document.getElementById('materialId').value = m.id;
+    document.getElementById('materialName').value = m.name || '';
+    document.getElementById('materialWork').value = m.workId || '';
+    document.getElementById('materialQuantity').value = m.quantity || 0;
+    document.getElementById('materialUnit').value = m.unit || '';
+    document.getElementById('materialSupplier').value = m.supplier || '';
+    document.getElementById('materialScope').value = m.scope || 'Whole';
+    document.getElementById('materialCifDate').value = m.cifDate || m.date || '';
+    document.getElementById('materialYard').value = m.yard || '';
+    document.getElementById('materialStatus').value = m.status || 'Pending';
+    document.getElementById('materialDelayCount').value = m.delayCount || 0;
+    document.getElementById('materialDelayReason').value = m.delayReason || '';
+    document.getElementById('materialNotes').value = m.notes || '';
+    closeModal('dayDetailModal');
+    openModal('materialModal');
+}
+
+function deleteMaterial(id) {
+    if (!confirm('Are you sure you want to delete this material record?')) return;
+    state.materials = state.materials.filter(m => m.id !== id);
+    saveData();
+    renderAll();
+    if (state.selectedDate) openDayDetail(state.selectedDate);
+    showToast('Material record deleted', 'success');
+}
+
+function editAccident(id) {
+    const a = state.accidents.find(item => item.id === id);
+    if (!a) return;
+    document.getElementById('accidentModalTitle').textContent = 'Edit Accident / Incident Report';
+    document.getElementById('accidentId').value = a.id;
+    document.getElementById('accidentDate').value = a.date || '';
+    document.getElementById('accidentWork').value = a.workId || '';
+    document.getElementById('accidentLocation').value = a.location || '';
+    document.getElementById('accidentType').value = a.type || 'Safety Incident';
+    document.getElementById('accidentSeverity').value = a.severity || 'Minor';
+    document.getElementById('accidentDescription').value = a.description || '';
+    closeModal('dayDetailModal');
+    openModal('accidentModal');
+}
+
+function deleteAccident(id) {
+    if (!confirm('Are you sure you want to delete this accident report?')) return;
+    state.accidents = state.accidents.filter(a => a.id !== id);
+    saveData();
+    renderAll();
+    if (state.selectedDate) openDayDetail(state.selectedDate);
+    showToast('Accident report deleted', 'success');
+}
+
+function openDayDetail(dateStr) {
+    state.selectedDate = dateStr;
+    document.getElementById('dayDetailTitle').textContent = `Activity Details: ${dateStr}`;
+
+    const dayWorks = state.works.filter(w => {
+        const start = w.plannedStart || w.actualStart;
+        const end = w.plannedEnd || w.actualEnd || start;
+        return start && end && dateStr >= start && dateStr <= end;
+    });
+    const dayProcesses = state.processes.filter(p => p.date === dateStr);
+    const dayMaterials = state.materials.filter(m => m.cifDate === dateStr || m.date === dateStr);
+    const dayAccidents = state.accidents.filter(a => a.date === dateStr);
+
+    let html = '';
+
+    html += `<div class="day-section">
+        <div class="day-section-header">Works (${dayWorks.length})</div>`;
+    if (dayWorks.length === 0) {
+        html += `<div class="empty">No works scheduled or executed matching this date.</div>`;
+    } else {
+        dayWorks.forEach(w => {
+            html += `<div class="record-card">
+                <div class="record-title" style="color:${w.color || 'inherit'}">${escapeHtml(w.type)}: ${escapeHtml(w.name)}</div>
+                <div class="record-meta">
+                    Status: <strong>${w.status}</strong> | Start (Pln: ${w.plannedStart || '-'} / Act: ${w.actualStart || '-'}) | End (Pln: ${w.plannedEnd || '-'} / Act: ${w.actualEnd || '-'})<br>
+                    Subcontractor: ${escapeHtml(w.subcontractor || '-')} | Crane: ${escapeHtml(w.crane || 'No')}
+                </div>
+                <div style="margin-top:4px;">
+                    <button class="btn btn-small btn-light" onclick="editWork('${w.id}'); closeModal('dayDetailModal');">Edit</button>
+                    <button class="btn btn-small btn-danger" onclick="deleteWork('${w.id}'); closeModal('dayDetailModal');">Delete</button>
+                </div>
+            </div>`;
+        });
+    }
+    html += `</div>`;
+
+    html += `<div class="day-section">
+        <div class="day-section-header">Daily Process Logs (${dayProcesses.length})</div>`;
+    if (dayProcesses.length === 0) {
+        html += `<div class="empty">No process logs recorded.</div>`;
+    } else {
+        dayProcesses.forEach(p => {
+            const assocWork = state.works.find(w => w.id === p.workId);
+            const badgeBg = p.progressStatus === 'Finished' ? '#f0fdfa' : '#fffbeb';
+            const badgeColor = p.progressStatus === 'Finished' ? '#0f766e' : '#d97706';
+            
+            html += `<div class="record-card">
+                <div class="record-title">${escapeHtml(p.subtitle || 'Process Log')} <span style="font-size:0.6rem; padding:1px 4px; border-radius:3px; background:${badgeBg}; color:${badgeColor}; float:right;">${p.progressStatus}</span></div>
+                <div class="record-meta">
+                    Work: <strong>${assocWork ? escapeHtml(assocWork.name) : 'General'}</strong> | FE: ${escapeHtml(p.fe || 'N/A')}<br>
+                    Alignment: <strong>${p.alignment}</strong> | Subcontractor: ${escapeHtml(p.subcontractor || '-')} (${p.pax || 0} Pax)<br>
+                    Notes: ${escapeHtml(p.notes || 'None')}
+                </div>
+                <div style="margin-top:4px;">
+                    <button class="btn btn-small btn-light" onclick="editProcess('${p.id}')">Edit</button>
+                    <button class="btn btn-small btn-danger" onclick="deleteProcess('${p.id}')">Delete</button>
+                </div>
+            </div>`;
+        });
+    }
+    html += `</div>`;
+
+    html += `<div class="day-section">
+        <div class="day-section-header">Material Deliveries (${dayMaterials.length})</div>`;
+    if (dayMaterials.length === 0) {
+        html += `<div class="empty">No material deliveries scheduled for this date.</div>`;
+    } else {
+        dayMaterials.forEach(m => {
+            const isDelayed = m.status === 'Delayed';
+            const cardBg = isDelayed ? '#fff1f2' : 'var(--surface-hover)';
+            const cardBorder = isDelayed ? 'var(--danger)' : 'var(--border)';
+            html += `<div class="record-card" style="background:${cardBg}; border-color:${cardBorder};">
+                <div class="record-title">📦 ${escapeHtml(m.name)} - ${m.quantity} ${escapeHtml(m.unit)} <span style="float:right;">Status: <strong>${m.status}</strong></span></div>
+                <div class="record-meta">
+                    Supplier: ${escapeHtml(m.supplier || '-')} | Scope: <strong>${m.scope || 'Whole'}</strong> | Yard: <strong>${escapeHtml(m.yard || '-')}</strong><br>
+                    Delay Count: <strong style="color:var(--danger);">${m.delayCount || 0}</strong> | Notes: ${escapeHtml(m.delayReason || m.notes || 'None')}
+                </div>
+                <div style="margin-top:4px;">
+                    <button class="btn btn-small btn-light" onclick="editMaterial('${m.id}')">Edit</button>
+                    <button class="btn btn-small btn-danger" onclick="deleteMaterial('${m.id}')">Delete</button>
+                </div>
+            </div>`;
+        });
+    }
+    html += `</div>`;
+
+    html += `<div class="day-section">
+        <div class="day-section-header">Accidents / Incidents (${dayAccidents.length})</div>`;
+    if (dayAccidents.length === 0) {
+        html += `<div class="empty">No incidents recorded.</div>`;
+    } else {
+        dayAccidents.forEach(a => {
+            html += `<div class="record-card" style="border-color:var(--danger);background:var(--danger-light);">
+                <div class="record-title" style="color:var(--danger);">⚠️ ${escapeHtml(a.type || 'Incident')} (${escapeHtml(a.severity)})</div>
+                <div class="record-meta">
+                    Location: ${escapeHtml(a.location || '-')}<br>
+                    Description: ${escapeHtml(a.description)}
+                </div>
+                <div style="margin-top:4px;">
+                    <button class="btn btn-small btn-light" onclick="editAccident('${a.id}')">Edit</button>
+                    <button class="btn btn-small btn-danger" onclick="deleteAccident('${a.id}')">Delete</button>
+                </div>
+            </div>`;
+        });
+    }
+    html += `</div>`;
+
+    document.getElementById('dayDetailBody').innerHTML = html;
+    openModal('dayDetailModal');
+}
+
+function openBackupModal() {
+    const textarea = document.getElementById('backupTextarea');
+    const payload = {
+        works: state.works,
+        processes: state.processes,
+        materials: state.materials,
+        accidents: state.accidents
+    };
+    textarea.value = JSON.stringify(payload, null, 2);
+    openModal('backupModal');
+}
+
+function getBackupPayload() {
+    return {
+        version: 13,
+        exportedAt: new Date().toISOString(),
+        works: state.works,
+        processes: state.processes,
+        materials: state.materials,
+        accidents: state.accidents
+    };
+}
+
+function exportData() {
+    const payload = getBackupPayload();
+    const json = JSON.stringify(payload, null, 2);
+    document.getElementById('backupTextarea').value = json;
+
+    const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    a.href = url;
+    a.download = `construction-project-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    showToast('Backup JSON downloaded', 'success');
+}
+
+function copyBackupData() {
+    const textarea = document.getElementById('backupTextarea');
+    if (!textarea.value.trim()) {
+        textarea.value = JSON.stringify(getBackupPayload(), null, 2);
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textarea.value)
+            .then(() => showToast('Backup JSON copied to clipboard', 'success'))
+            .catch(() => fallbackCopyBackup());
+    } else {
+        fallbackCopyBackup();
+    }
+}
+
+function fallbackCopyBackup() {
+    const textarea = document.getElementById('backupTextarea');
+    textarea.focus();
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        showToast('Backup JSON copied', 'success');
+    } catch (e) {
+        showToast('Copy failed — select the JSON manually', 'error');
+    }
+}
+
+function applyImportedData(parsed) {
+    if (!parsed || typeof parsed !== 'object') {
+        throw new Error('Backup must be a JSON object.');
+    }
+
+    if (!Array.isArray(parsed.works) ||
+        !Array.isArray(parsed.processes) ||
+        !Array.isArray(parsed.materials) ||
+        !Array.isArray(parsed.accidents)) {
+        throw new Error('Backup is missing one or more required data sections.');
+    }
+
+    state.works = parsed.works;
+    state.processes = parsed.processes;
+    state.materials = parsed.materials;
+    state.accidents = parsed.accidents;
+    state.selectedWorkTabId = state.works[0]?.id || null;
+    state.selectedDate = null;
+    state.tableTypeFilter = '';
+
+    saveData();
+    renderAll();
+}
+
+function importData() {
+    try {
+        const val = document.getElementById('backupTextarea').value.trim();
+        if (!val) {
+            showToast('Paste JSON backup data first', 'error');
+            return;
+        }
+
+        applyImportedData(JSON.parse(val));
+        closeModal('backupModal');
+        showToast('Data restored successfully!', 'success');
+    } catch (e) {
+        console.error(e);
+        showToast('Invalid or incompatible JSON backup', 'error');
+    }
+}
+
+function restoreFromFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        try {
+            const parsed = JSON.parse(reader.result);
+            applyImportedData(parsed);
+            document.getElementById('backupTextarea').value = JSON.stringify(parsed, null, 2);
+            closeModal('backupModal');
+            showToast('Backup file restored successfully!', 'success');
+        } catch (e) {
+            console.error(e);
+            showToast('Could not restore that JSON file', 'error');
+        } finally {
+            event.target.value = '';
+        }
+    };
+    reader.onerror = () => {
+        showToast('Could not read the backup file', 'error');
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 200);
+    }, 3000);
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+</script>
+</body>
+</html>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
